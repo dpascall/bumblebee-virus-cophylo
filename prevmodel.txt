@@ -1,0 +1,11 @@
+model {
+for (i in 1:N) {
+x[i] ~ dbern(AP[i])
+AP[i] <- SEpool[i] * (1 - pow(1 - TP, n[i])) + (1 - SPpool[i]) * pow(1 - TP, n[i])
+SEpool[i] <- 1 - (pow(1 - SE, n[i] * TP) * pow(SP, n[i] * (1 - TP)))
+SPpool[i] <- pow(SP, n[i])
+}
+SE <- 1
+SP <- 1
+TP ~ dbeta(1,1)
+}
