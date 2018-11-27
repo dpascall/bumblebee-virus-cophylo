@@ -241,8 +241,8 @@ generated quantities {
 	log_lik[i] = log_sum_exp(uncertainty_log_lik);
   }
 
-  //generate data simulations, using infection probability weighted by posterior
-  //probability of each tree (VCV) in the phylogenetic uncertainty case
+  //generate data simulations, using infection probability averaged over
+  //each tree (VCV) in the phylogenetic uncertainty case
   if (matrices == 1) {
     for(i in 1:datapoints) {
       y_sim[i] = bernoulli_rng(theta[1,i]);
@@ -257,9 +257,8 @@ generated quantities {
     }
   }
   
-  //generate posterior predicted means, using infection probability weighted by
-  //posterior probability of each tree (VCV) in the phylogenetic uncertainty 
-  //case
+  //generate posterior predicted means, using infection probability averaged over
+  //each tree (VCV) in the phylogenetic uncertainty case
   if (matrices == 1) {
     for(i in 1:virushostcombinations) {
       y_pred[i] = inv_logit(alpha + mean_virus[virus_pred[i]] + mean_host[host_pred[i]] + mean_inter[combination_pred[i]] + mean_virusphy[1,virus_pred[i]] + mean_hostphy[1,host[i]] + mean_virusinter[1,combination_pred[i]] + mean_hostinter[1,combination_pred[i]] + mean_coevointer[1,combination_pred[i]] + normal_rng(0,sqrt(sigma_pool)) + normal_rng(0,sqrt(sigma_spatial)) + normal_rng(0,sqrt(sigma_residual)));
