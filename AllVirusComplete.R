@@ -10,8 +10,8 @@ options(mc.cores = parallel::detectCores())
 
 ##read in trees
 
-hosttree<-read.nexus("~/DoublePhyloStan/HostTreesReduced10.tree")
-virustree<-read.nexus("~/DoublePhyloStan/VirusTreesReduced10.tree")
+hosttree<-read.nexus("HostTreesReduced10.tree")
+virustree<-read.nexus("VirusTreesReduced10.tree")
 
 hosttreenumber<-length(hosttree)
 virustreenumber<-length(virustree)
@@ -20,7 +20,7 @@ matrices<-hosttreenumber*virustreenumber
 
 ##read and reshape data
 
-data<-read.csv("~/DoublePhyloStan/GeoNoHov.csv",header=T)
+data<-read.csv("Data.csv",header=T)
 data$SpatialComposition<-as.factor(data$SpatialComposition)
 reshapeddata<-reshape(data, direction="long", varying=list(names(data)[-c(1:4)]), times=names(data)[-c(1:4)])
 colnames(reshapeddata)<-c("PoolID","Host","Count","SpatialComposition","Virus","Status","ID")
@@ -87,7 +87,7 @@ params<-c("sigma_virus", "sigma_virusphy", "sigma_host", "sigma_hostphy", "sigma
           "ICC_coevointer", "ICC_pool", "ICC_spatial", "ICC_residual", "ICC_nonphylogenetic", "ICC_phylogenetic", "denominator", "log_lik", "y_sim" , "y_pred", "lp__")
 
 ptm <- proc.time()
-fit <- stan("~/Exp1/DoublePhyloStan/CompleteCophylogeneticNC.stan", data = dat, iter = 3000, warmup = 2000, pars=params, thin = 1, chains=4, verbose = TRUE, init_r=0.01, refresh=1, control = list(adapt_delta = 0.9999, max_treedepth = 100))
+fit <- stan("CompleteCophylogeneticNC.stan", data = dat, iter = 3000, warmup = 2000, pars=params, thin = 1, chains=4, verbose = TRUE, init_r=0.01, refresh=1, control = list(adapt_delta = 0.9999, max_treedepth = 100))
 proc.time() - ptm
 
-save(fit, file="~/Exp1/DoublePhyloStan/Results/AllFull10.Rdata")
+save(fit, file="AllFull10.Rdata")

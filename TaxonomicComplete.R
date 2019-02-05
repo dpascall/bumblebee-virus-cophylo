@@ -10,8 +10,8 @@ options(mc.cores = parallel::detectCores())
 
 ##read in trees
 
-hosttree<-read.nexus("~/DoublePhyloStan/HostTreesReduced10.tree")
-virustree<-as.matrix(read.csv("~/DoublePhyloStan/taxonomicviralmatrix.csv",header=T,row.names=1))
+hosttree<-read.nexus("HostTreesReduced10.tree")
+virustree<-as.matrix(read.csv("taxonomicviralmatrix.csv",header=T,row.names=1))
 
 hosttreenumber<-length(hosttree)
 virustreenumber<-1
@@ -20,7 +20,7 @@ matrices<-hosttreenumber*virustreenumber
 
 ##read and reshape data
 
-data<-read.csv("~/DoublePhyloStan/GeoNoHov.csv",header=T)
+data<-read.csv("Data.csv",header=T)
 data$SpatialComposition<-as.factor(data$SpatialComposition)
 reshapeddata<-reshape(data, direction="long", varying=list(names(data)[-c(1:4)]), times=names(data)[-c(1:4)])
 colnames(reshapeddata)<-c("PoolID","Host","Count","SpatialComposition","Virus","Status","ID")
@@ -88,4 +88,4 @@ ptm <- proc.time()
 fit <- stan("~/Exp1/DoublePhyloStan/CompleteCophylogeneticNC.stan", data = dat, iter = 3000, warmup = 2000, pars=params, thin = 1, chains=4, verbose = TRUE, init_r=0.01, refresh=1, control = list(adapt_delta = 0.9999, max_treedepth = 100))
 proc.time() - ptm
 
-save(fit, file="~/Exp1/DoublePhyloStan/Results/TaxonomicFull10.Rdata")
+save(fit, file="TaxonomicFull10.Rdata")

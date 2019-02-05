@@ -2,7 +2,7 @@ library(MCMCglmm)
 library(prevalence)
 library(reshape)
 
-data<-read.csv("~/Dropbox/Paper 2/DataforPrevalence.csv",header=T)
+data<-read.csv("Data.csv",header=T)
 data$SpatialComposition<-as.factor(data$SpatialComposition)
 reshapeddata<-reshape(data, direction="long", varying=list(names(data)[-c(1:4)]), times=names(data)[-c(1:4)])
 colnames(reshapeddata)<-c("PoolID","Host","Count","SpatialComposition","Virus","Status","ID")
@@ -55,7 +55,6 @@ for (i in 1:length(unique(reshapeddata$Virus))) {
   }
 }
 
-#tonguelengths<-cbind(tonguelengths,c(8.5,7.6,12.5,7.7,7.3,7.5,NA,8,6.4,7.5,8.5))
 tonguelengths<-matrix(c(8.5,7.6,12.5,7.7,7.3,7.5,NA,8,6.4,7.5,8.5),nrow=length(row.names(mats)),ncol=1)
 row.names(tonguelengths)<-row.names(mats)
 tonguelengths<-tonguelengths[-7,]
